@@ -8,13 +8,14 @@ import { AnalyticsService } from './@core/utils/analytics.service';
 import { SeoService } from './@core/utils/seo.service';
 
 @Component({
-  selector: 'angular-nest-nx-root',
+  selector: 'su-gtd-root',
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-
-  constructor(private analytics: AnalyticsService, private seoService: SeoService) {
-  }
+  constructor(
+    private analytics: AnalyticsService,
+    private seoService: SeoService
+  ) {}
 
   ngOnInit() {
     this.analytics.trackPageViews();

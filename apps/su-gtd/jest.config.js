@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'angular-nest-nx',
+  displayName: 'su-gtd',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/apps/angular-nest-nx',
+  coverageDirectory: '../../coverage/apps/su-gtd',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
   },

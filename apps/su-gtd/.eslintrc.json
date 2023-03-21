@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "angular-nest-nx",
+            "prefix": "su-gtd",
             "style": "kebab-case"
           }
         ]

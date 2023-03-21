@@ -6,27 +6,27 @@ Starter project with Angular 13, Ngx-admin, NestJs, Nx Workspace, Jest, Cypress,
 
 ![Angular13](https://img.shields.io/badge/Angular-13-brightgreen)
 ![NestJS8](https://img.shields.io/badge/NestJS-8-brightgreen)
-[![Build](https://api.travis-ci.org/wlucha/angular-nest-nx.svg?branch=master)](https://travis-ci.org/github/wlucha/angular-nest-nx)
+[![Build](https://api.travis-ci.org/wlucha/su-gtd.svg?branch=master)](https://travis-ci.org/github/wlucha/su-gtd)
 [![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wlucha_angular-nest-nx&metric=alert_status)](https://sonarcloud.io/dashboard?id=wlucha_angular-nest-nx)
-[![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/wlucha/angular-nest-nx)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wlucha_su-gtd&metric=alert_status)](https://sonarcloud.io/dashboard?id=wlucha_su-gtd)
+[![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/wlucha/su-gtd)
 
 ## Features
 
 ✅ [Angular 13](https://angular.io/)  
-✅ [Ngx-admin](https://akveo.github.io/ngx-admin/)   
-✅ [NestJS 8](https://nestjs.com/)   
+✅ [Ngx-admin](https://akveo.github.io/ngx-admin/)  
+✅ [NestJS 8](https://nestjs.com/)  
 ✅ Next generation build system with [Nx](https://nx.dev/)  
 ✅ Unit Testing with [Jest](https://jestjs.io/)  
 ✅ End-to-End Testing with [Cypress](https://www.cypress.io/)  
 ✅ [ESLint](https://eslint.org/)  
-✅ [Prettier](https://prettier.io/)  
+✅ [Prettier](https://prettier.io/)
 
 ## Frontend App
-The Angular 13 frontend app is based on the [ngx-admin](https://github.com/akveo/ngx-admin) starter kit.  
+
+The Angular 13 frontend app is based on the [ngx-admin](https://github.com/akveo/ngx-admin) starter kit.
 
 ![image](https://user-images.githubusercontent.com/7531596/148551080-de61fdb5-ffa4-496e-a26b-4bbf9dd35e9e.png)
-
 
 ## Deploy
 
@@ -36,7 +36,7 @@ The Angular 13 frontend app is based on the [ngx-admin](https://github.com/akveo
 
 ```bash
 # Clone the project
-$ git clone https://github.com/wlucha/angular-nest-nx
+$ git clone https://github.com/wlucha/su-gtd
 $ cd angular-starter
 
 # Install dependencies
