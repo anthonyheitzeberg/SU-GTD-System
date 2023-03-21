@@ -1,5 +1,5 @@
 {
-  "npmScope": "angular-nest-nx",
+  "npmScope": "su-gtd",
   "affected": {
     "defaultBase": "master"
   },
@@ -45,5 +45,5 @@
       "style": "scss"
     }
   },
-  "defaultProject": "angular-nest-nx"
+  "defaultProject": "su-gtd"
 }

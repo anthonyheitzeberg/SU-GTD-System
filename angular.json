@@ -1,26 +1,23 @@
 {
   "version": 1,
   "projects": {
-    "angular-nest-nx": {
+    "su-gtd": {
       "projectType": "application",
-      "root": "apps/angular-nest-nx",
-      "sourceRoot": "apps/angular-nest-nx/src",
-      "prefix": "angular-nest-nx",
+      "root": "apps/su-gtd",
+      "sourceRoot": "apps/su-gtd/src",
+      "prefix": "su-gtd",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/angular-nest-nx",
-            "index": "apps/angular-nest-nx/src/index.html",
-            "main": "apps/angular-nest-nx/src/main.ts",
-            "polyfills": "apps/angular-nest-nx/src/polyfills.ts",
-            "tsConfig": "apps/angular-nest-nx/tsconfig.app.json",
+            "outputPath": "dist/apps/su-gtd",
+            "index": "apps/su-gtd/src/index.html",
+            "main": "apps/su-gtd/src/main.ts",
+            "polyfills": "apps/su-gtd/src/polyfills.ts",
+            "tsConfig": "apps/su-gtd/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "apps/angular-nest-nx/src/favicon.ico",
-              "apps/angular-nest-nx/src/assets"
-            ],
+            "assets": ["apps/su-gtd/src/favicon.ico", "apps/su-gtd/src/assets"],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/typeface-exo/index.css",
@@ -29,11 +26,9 @@
               "node_modules/socicon/css/socicon.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
-              "apps/angular-nest-nx/src/app/@theme/styles/styles.scss"
+              "apps/su-gtd/src/app/@theme/styles/styles.scss"
             ],
-            "scripts": [
-              "node_modules/pace-js/pace.min.js"
-            ]
+            "scripts": ["node_modules/pace-js/pace.min.js"]
           },
           "configurations": {
             "production": {
@@ -51,8 +46,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "apps/angular-nest-nx/src/environments/environment.ts",
-                  "with": "apps/angular-nest-nx/src/environments/environment.prod.ts"
+                  "replace": "apps/su-gtd/src/environments/environment.ts",
+                  "with": "apps/su-gtd/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -72,57 +67,57 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular-nest-nx:build:production"
+              "browserTarget": "su-gtd:build:production"
             },
             "development": {
-              "browserTarget": "angular-nest-nx:build:development"
+              "browserTarget": "su-gtd:build:development"
             }
           },
           "defaultConfiguration": "development",
           "options": {
-            "proxyConfig": "apps/angular-nest-nx/proxy.conf.json"
+            "proxyConfig": "apps/su-gtd/proxy.conf.json"
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-nest-nx:build"
+            "browserTarget": "su-gtd:build"
           }
         },
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": [
-              "apps/angular-nest-nx/src/**/*.ts",
-              "apps/angular-nest-nx/src/**/*.html"
+              "apps/su-gtd/src/**/*.ts",
+              "apps/su-gtd/src/**/*.html"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/angular-nest-nx"],
+          "outputs": ["coverage/apps/su-gtd"],
           "options": {
-            "jestConfig": "apps/angular-nest-nx/jest.config.js",
+            "jestConfig": "apps/su-gtd/jest.config.js",
             "passWithNoTests": true
           }
         }
       },
       "tags": []
     },
-    "angular-nest-nx-e2e": {
-      "root": "apps/angular-nest-nx-e2e",
-      "sourceRoot": "apps/angular-nest-nx-e2e/src",
+    "su-gtd-e2e": {
+      "root": "apps/su-gtd-e2e",
+      "sourceRoot": "apps/su-gtd-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/angular-nest-nx-e2e/cypress.json",
-            "devServerTarget": "angular-nest-nx:serve:development"
+            "cypressConfig": "apps/su-gtd-e2e/cypress.json",
+            "devServerTarget": "su-gtd:serve:development"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "angular-nest-nx:serve:production"
+              "devServerTarget": "su-gtd:serve:production"
             }
           }
         },
@@ -130,12 +125,12 @@
           "builder": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/angular-nest-nx-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["apps/su-gtd-e2e/**/*.{js,ts}"]
           }
         }
       },
       "tags": [],
-      "implicitDependencies": ["angular-nest-nx"]
+      "implicitDependencies": ["su-gtd"]
     },
     "api": {
       "root": "apps/api",
@@ -143,7 +138,7 @@
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@nrwl/node:build",
+          "builder": "@nrwl/node:webpack",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/api",
@@ -166,7 +161,7 @@
           }
         },
         "serve": {
-          "builder": "@nrwl/node:execute",
+          "builder": "@nrwl/node:node",
           "options": {
             "buildTarget": "api:build"
           }
