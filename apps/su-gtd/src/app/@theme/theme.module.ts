@@ -12,6 +12,11 @@ import {
   NbSelectModule,
   NbIconModule,
   NbThemeModule,
+  NbFormFieldModule,
+  NbCheckboxModule,
+  NbInputModule,
+  NbCardModule,
+  NbWindowModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
@@ -53,6 +58,10 @@ const NB_MODULES = [
   NbSelectModule,
   NbIconModule,
   NbEvaIconsModule,
+  NbFormFieldModule,
+  NbCheckboxModule,
+  NbInputModule,
+  NbCardModule,
 ];
 const COMPONENTS = [
   SwitcherComponent,
@@ -73,7 +82,7 @@ const PIPES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...NB_MODULES],
+  imports: [CommonModule, NbWindowModule.forChild(), ...NB_MODULES],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
 })
@@ -86,7 +95,7 @@ export class ThemeModule {
           {
             name: 'default',
           },
-          [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME ],
+          [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME]
         ).providers,
       ],
     };

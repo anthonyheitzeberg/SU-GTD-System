@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@su-gtd/api-enums": ["libs/api-enums/src/index.ts"],
       "@su-gtd/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },

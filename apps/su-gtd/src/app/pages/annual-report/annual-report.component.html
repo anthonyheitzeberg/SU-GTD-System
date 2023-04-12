@@ -1,0 +1,61 @@
+<nb-card>
+  <nb-card-header>Annual Report</nb-card-header>
+  <nb-card-body>
+    <form>
+      <div class="form-control-group" class="mb-2">
+        <div class="row">
+          <div class="col-sm-6">
+            <label for="select-college" class="label mb-2"
+              >College/Department</label
+            >
+            <nb-select
+              id="select-college"
+              name="selectCollege"
+              placeholder="Select College"
+              size="medium"
+              fullWidth
+            >
+              <nb-option
+                *ngFor="let college of colleges | keyvalue"
+                [value]="college.value"
+                >{{ college.value }}</nb-option
+              >
+            </nb-select>
+          </div>
+          <div class="col-sm-6">
+            <label for="select-year" class="label mb-2"
+              >Annual Report Year</label
+            >
+            <nb-select
+              id="select-year"
+              name="year"
+              placeholder="Select Year"
+              size="medium"
+              fullWidth
+            >
+              <nb-option *ngFor="let year of years" [value]="year">{{
+                year
+              }}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </div>
+
+      <div *ngFor="let guidanceService of guidanceServices | keyvalue">
+        <span>{{ guidanceService.value }}</span>
+      </div>
+    </form>
+
+    <button
+      (click)="openConfirmDialog()"
+      class="mt-2"
+      nbButton
+      appearance="filled"
+      status="success"
+      size="medium"
+      shape="round"
+    >
+      SUBMIT
+    </button>
+  </nb-card-body>
+</nb-card>

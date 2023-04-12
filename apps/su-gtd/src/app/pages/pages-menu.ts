@@ -8,29 +8,26 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: 'FEATURES',
+    title: 'Profile',
+    icon: 'person-outline',
+    link: '/pages/profile',
+  },
+  {
+    title: 'Features',
     group: true,
   },
   {
-    title: 'Auth',
-    icon: 'lock-outline',
-    children: [
-      {
-        title: 'Login',
-        link: '/auth/login',
-      },
-      {
-        title: 'Register',
-        link: '/auth/register',
-      },
-      {
-        title: 'Request Password',
-        link: '/auth/request-password',
-      },
-      {
-        title: 'Reset Password',
-        link: '/auth/reset-password',
-      },
-    ],
+    title: 'Annual Report',
+    icon: 'file-text-outline',
+    link: '/pages/annual-report',
+  },
+  {
+    title: 'Statistics',
+    icon: 'pie-chart-outline',
+    link: '/pages/statistics',
+  },
+  {
+    title: 'Log Out',
+    icon: 'log-out-outline',
   },
 ];

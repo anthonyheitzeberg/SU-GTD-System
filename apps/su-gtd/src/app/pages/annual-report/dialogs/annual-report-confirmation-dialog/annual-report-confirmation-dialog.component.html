@@ -1,0 +1,16 @@
+<nb-card>
+  <nb-card-header><h3>Are you sure?</h3></nb-card-header>
+  <nb-card-body
+    >This will be reviewed by the Head and can't be undone.</nb-card-body
+  >
+  <nb-card-footer>
+    <div class="d-flex justify-content-between">
+      <button [autofocus]="false" nbButton status="success" (click)="dismiss()">
+        CONFIRM
+      </button>
+      <button [autofocus]="false" nbButton status="danger" (click)="dismiss()">
+        CANCEL
+      </button>
+    </div>
+  </nb-card-footer>
+</nb-card>
