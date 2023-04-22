@@ -1,7 +1,159 @@
 <nb-card>
-  <nb-card-header>Annual Report</nb-card-header>
+  <nb-card-header><h2>View Annual Reports</h2></nb-card-header>
+  <nb-card-body
+    ><div
+      [formGroup]="viewReportForm"
+      class="form-control-group d-flex justify-content-center"
+      class="mb-2"
+    >
+      <div class="row">
+        <div class="col-sm-5">
+          <label for="select-college" class="label mb-2"
+            >College/Department</label
+          >
+          <nb-select
+            id="select-college"
+            name="selectCollege"
+            placeholder="Select College"
+            size="medium"
+            formControlName="college"
+            fullWidth
+          >
+            <nb-option
+              *ngFor="let college of colleges | keyvalue"
+              [value]="college.value"
+              >{{ college.value }}</nb-option
+            >
+          </nb-select>
+        </div>
+        <div class="col-sm-5">
+          <label for="select-year" class="label mb-2">Annual Report Year</label>
+          <nb-select
+            id="select-year"
+            name="year"
+            placeholder="Select Year"
+            size="medium"
+            fullWidth
+            formControlName="year"
+          >
+            <nb-option *ngFor="let year of years" [value]="year">{{
+              year
+            }}</nb-option>
+          </nb-select>
+        </div>
+        <div class="col-sm-2">
+          <button
+            class="mt-4"
+            nbButton
+            [disabled]="viewReportForm.invalid"
+            (click)="getActivitiesOfViewReports()"
+            appearance="filled"
+            status="success"
+            size="medium"
+            shape="round"
+          >
+            SUBMIT
+          </button>
+          <button
+            class="ms-3 mt-4"
+            nbTooltip="Reset Value"
+            nbButton
+            status="danger"
+            (click)="clearForm(formTypes.VIEW_REPORT)"
+            [disabled]="!filteredViewAnnualReports.length"
+          >
+            <nb-icon icon="trash-2-outline"></nb-icon>
+          </button>
+
+          <button
+            class="ms-3 mt-4"
+            nbTooltip="Refresh"
+            nbButton
+            status="primary"
+            (click)="getActivitiesOfViewReports()"
+            [disabled]="!filteredViewAnnualReports.length"
+          >
+            <nb-icon icon="refresh-outline"></nb-icon>
+          </button>
+        </div>
+      </div>
+      <table
+        *ngIf="filteredViewAnnualReports.length; else emptyList"
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8 mt-3"
+      >
+        <ng-container matColumnDef="guidanceServiceType">
+          <th mat-header-cell *matHeaderCellDef>Guidance Service</th>
+          <td
+            class="fw-bold"
+            mat-cell
+            *matCellDef="let element; let i = index"
+            [attr.rowspan]="getRowSpan('guidanceServiceType', i)"
+            [style.display]="getRowSpan('guidanceServiceType', i) ? '' : 'none'"
+          >
+            {{ element.guidanceServiceType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="activityName">
+          <th mat-header-cell *matHeaderCellDef>Activity Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.activityName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateOfActivity">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="
+                element.startDateOfActivity !== element.endDateOfActivity;
+                else singleDate
+              "
+            >
+              {{ element.startDateOfActivity }} -
+              {{ element.endDateOfActivity }}
+            </ng-container>
+            <ng-template #singleDate>
+              {{ element.startDateOfActivity }}
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="targetGroup">
+          <th mat-header-cell *matHeaderCellDef>Target Group</th>
+          <td mat-cell *matCellDef="let element">{{ element.targetGroup }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="performanceIndicator">
+          <th mat-header-cell *matHeaderCellDef>Performance Indicator</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.numOfAttendees }}/{{ element.totalTargetGroup }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="percentage">
+          <th mat-header-cell *matHeaderCellDef>Percentage</th>
+          <td mat-cell *matCellDef="let element">{{ element.percentage }}%</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <ng-template #emptyList>
+        <h6 class="my-4" *ngIf="hasSelected && hasViewAnnualReportSubmitted">
+          There is no data for your current entry
+        </h6>
+      </ng-template>
+    </div></nb-card-body
+  >
+</nb-card>
+
+<nb-card>
+  <nb-card-header><h2>Submit/Update Annual Report</h2></nb-card-header>
   <nb-card-body>
-    <form>
+    <form [formGroup]="form">
+      <!-- College and Year -->
       <div class="form-control-group" class="mb-2">
         <div class="row">
           <div class="col-sm-6">
@@ -13,7 +165,10 @@
               name="selectCollege"
               placeholder="Select College"
               size="medium"
+              formControlName="college"
               fullWidth
+              (selectedChange)="check()"
+              [disabled]="isReportActionSelected"
             >
               <nb-option
                 *ngFor="let college of colleges | keyvalue"
@@ -31,7 +186,10 @@
               name="year"
               placeholder="Select Year"
               size="medium"
+              formControlName="year"
               fullWidth
+              (selectedChange)="check()"
+              [disabled]="isReportActionSelected"
             >
               <nb-option *ngFor="let year of years" [value]="year">{{
                 year
@@ -41,21 +199,208 @@
         </div>
       </div>
 
-      <div *ngFor="let guidanceService of guidanceServices | keyvalue">
-        <span>{{ guidanceService.value }}</span>
+      <div *ngIf="!isReportActionSelected" class="d-flex flex-row my-4">
+        <button
+          (click)="
+            isReportActionSelected = !isReportActionSelected;
+            clearFormArray(toFormArray(form.get('guidanceServices')))
+          "
+          class="mt-2 me-3"
+          nbButton
+          appearance="filled"
+          status="success"
+          size="medium"
+          shape="round"
+          [disabled]="
+            form.get('year').value &&
+            form.get('college').value &&
+            !annualFormStatus.canAdd
+          "
+        >
+          SUBMIT NEW
+        </button>
+        <button
+          (click)="isReportActionSelected = !isReportActionSelected; check()"
+          class="mt-2 me-3"
+          nbButton
+          appearance="filled"
+          status="success"
+          size="medium"
+          shape="round"
+          [disabled]="
+            form.get('year').value &&
+            form.get('college').value &&
+            !annualFormStatus.canUpdate
+          "
+        >
+          UPDATE
+        </button>
+        <nb-icon
+          nbTooltip="The corresponding action that you can perform with annual report will be enabled"
+          class="mt-3 ms-3"
+          icon="alert-circle-outline"
+        ></nb-icon>
       </div>
+      <!-- Guidance Services -->
+      <ng-container *ngIf="isReportActionSelected">
+        <h4 class="my-4">GUIDANCE SERVICES</h4>
+        <div
+          class="mb-5"
+          *ngFor="
+            let guidanceService of guidanceServices | keyvalue;
+            let i = index
+          "
+        >
+          <h5>{{ i + 1 }}. {{ guidanceService.value }}</h5>
+          <hr />
+          <div>
+            <div
+              *ngIf="getActivities(guidanceService.key).length"
+              class="d-flex flex-row"
+            >
+              <p class="fw-bold activity-name">Activity Name</p>
+              <p class="fw-bold date">Date</p>
+              <p class="fw-bold target-group">Target Group</p>
+              <p class="fw-bold performance-indicator">Performance Indicator</p>
+              <p class="fw-bold percentage">Percentage</p>
+            </div>
+            <div
+              class="d-flex justify-content-between mt-3"
+              *ngFor="
+                let control of getActivities(guidanceService.key);
+                let i = index
+              "
+            >
+              <ng-container
+                [formGroup]="toFormGroup(control)"
+                calculatePercentage
+                [formControlName1]="'numOfAttendees'"
+                [formControlName2]="'totalTargetGroup'"
+              >
+                <input
+                  class="activity-name"
+                  type="text"
+                  nbInput
+                  status="basic"
+                  placeholder="Activity Name"
+                  formControlName="activityName"
+                />
+                <input
+                  class="date-range"
+                  nbInput
+                  placeholder="Pick Date Range"
+                  [nbDatepicker]="formpicker"
+                  formControlName="date"
+                />
+                <nb-rangepicker #formpicker></nb-rangepicker>
+                <nb-select
+                  class="target-group"
+                  id="select-target-group"
+                  name="selectTargetGroup"
+                  placeholder="Select Target Group"
+                  size="medium"
+                  formControlName="targetGroup"
+                >
+                  <nb-option
+                    *ngFor="let targetGroup of targetGroups | keyvalue"
+                    [value]="targetGroup.value"
+                    >{{ targetGroup.value }}</nb-option
+                  >
+                </nb-select>
+                <div>
+                  <input
+                    class="attended-input"
+                    type="number"
+                    nbInput
+                    status="basic"
+                    min="0"
+                    formControlName="numOfAttendees"
+                  />
+                  <span>/</span>
+                  <input
+                    class="total-input"
+                    type="number"
+                    nbInput
+                    status="basic"
+                    min="0"
+                    formControlName="totalTargetGroup"
+                  />
+                </div>
+                <div>
+                  <input
+                    class="percentage"
+                    type="number"
+                    nbInput
+                    status="basic"
+                    formControlName="percentage"
+                  /><span class="fw-bold">%</span>
+                </div>
+                <div>
+                  <button
+                    nbTooltip="Remove activity"
+                    class="me-2"
+                    nbButton
+                    status="danger"
+                    (click)="remove(toFormGroup(control))"
+                  >
+                    <nb-icon icon="trash-2-outline"></nb-icon>
+                  </button>
+                  <button
+                    *ngIf="i === getActivities(guidanceService.key).length"
+                    nbTooltip="Add activity"
+                    nbButton
+                    status="primary"
+                    (click)="add(guidanceService)"
+                  >
+                    <nb-icon icon="plus-circle-outline"></nb-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+            <button
+              (click)="add(guidanceService)"
+              class="my-3"
+              nbButton
+              appearance="filled"
+              status="primary"
+              size="medium"
+              shape="round"
+            >
+              ADD ACTIVITY
+            </button>
+          </div>
+        </div>
+      </ng-container>
     </form>
 
-    <button
-      (click)="openConfirmDialog()"
-      class="mt-2"
-      nbButton
-      appearance="filled"
-      status="success"
-      size="medium"
-      shape="round"
+    <div
+      *ngIf="isReportActionSelected"
+      class="d-flex flex-row justify-content-between"
     >
-      SUBMIT
-    </button>
+      <button
+        [disabled]="!form.valid"
+        (click)="upsert()"
+        class="mt-2"
+        nbButton
+        appearance="filled"
+        status="success"
+        size="medium"
+        shape="round"
+      >
+        {{ annualFormStatus.canAdd ? 'SUBMIT' : 'UPDATE' }}
+      </button>
+      <button
+        [disabled]="!isReportActionSelected"
+        (click)="isReportActionSelected = false; clearForm()"
+        class="mt-2"
+        nbButton
+        appearance="filled"
+        status="warning"
+        size="medium"
+        shape="round"
+      >
+        CANCEL
+      </button>
+    </div>
   </nb-card-body>
 </nb-card>

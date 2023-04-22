@@ -49,7 +49,7 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
     });
   }
 
-  override login() {
+  loginUser() {
     this.authService
       .login({
         email: this.form.controls.email.value,

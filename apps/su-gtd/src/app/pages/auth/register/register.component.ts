@@ -12,6 +12,7 @@ import {
   NbRegisterComponent,
 } from '@nebular/auth';
 import { NbComponentStatus, NbToastrService } from '@nebular/theme';
+import { AuthService } from '../../../@core/auth/service/auth.service';
 
 @Component({
   selector: 'su-gtd-register',
@@ -30,7 +31,8 @@ export class RegisterComponent extends NbRegisterComponent implements OnInit {
     @Inject(NB_AUTH_OPTIONS)
     options: Record<string, unknown>,
     cd: ChangeDetectorRef,
-    router: Router
+    router: Router,
+    private authService: AuthService
   ) {
     super(service, options, cd, router);
   }
@@ -68,17 +70,28 @@ export class RegisterComponent extends NbRegisterComponent implements OnInit {
   }
 
   override register(): void {
-    console.log(this.form.value);
     const dateStr = this.form.controls.birthday.value;
     const dateObj = new Date(dateStr);
     const year = dateObj.getFullYear();
     const month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
     const day = ('0' + dateObj.getDate()).slice(-2);
     const formattedDate = `${year}-${month}-${day}`;
-    console.log(formattedDate);
-    // if (this.showMessages.error && this.errors?.length && !this.submitted) {
-    //   this.showToast('danger', this.showMessages);
-    //   return;
-    // }
+
+    this.authService
+      .register({
+        firstName: this.form.controls['firstName'].value,
+        lastName: this.form.controls['lastName'].value,
+        email: this.form.controls['email'].value,
+        password: this.form.controls['password'].value,
+        gender: this.form.controls['gender'].value,
+        birthday: this.form.controls['birthday'].value,
+      })
+      .subscribe((res) => {
+        if (!res) {
+          return;
+        }
+
+        this.router.navigate(['/']);
+      });
   }
 }

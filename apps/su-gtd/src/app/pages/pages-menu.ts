@@ -29,5 +29,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Log Out',
     icon: 'log-out-outline',
+    link: '/pages/logout',
   },
 ];

@@ -8,4 +8,12 @@
       right: 0.41rem !important;
     }
   }
+
+  nb-select {
+    button:disabled {
+      span {
+        pointer-events: none;
+      }
+    }
+  }
 }

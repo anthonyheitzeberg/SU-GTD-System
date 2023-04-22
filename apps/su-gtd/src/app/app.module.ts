@@ -22,12 +22,14 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthTokenInterceptor } from './@core/auth/interceptor/auth-token.interceptor';
 import { AuthService } from './@core/auth/service/auth.service';
-
+import { firstValueFrom } from 'rxjs';
+import { NgChartsModule } from 'ng2-charts';
+import { NbDateFnsDateModule } from '@nebular/date-fns';
 const initialize = (authService: AuthService) => async () => {
   if (authService.getToken()) {
     // eslint-disable-next-line no-useless-catch
     try {
-      await authService.getProfile().toPromise();
+      await firstValueFrom(authService.getProfile());
     } catch (e) {
       throw e;
     }
@@ -51,6 +53,7 @@ const initialize = (authService: AuthService) => async () => {
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
     CoreModule.forRoot(),
+    NgChartsModule,
   ],
   providers: [
     {

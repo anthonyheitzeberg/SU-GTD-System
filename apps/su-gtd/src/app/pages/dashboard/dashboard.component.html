@@ -1,5 +1,9 @@
-<nb-card status="success">
-  <nb-card-body><h1 class="title">Welcome Walter White!</h1></nb-card-body>
+<nb-card status="success" *ngIf="currentUser">
+  <nb-card-body
+    ><h1 class="title">
+      Welcome {{ currentUser.firstName }} {{ currentUser.lastName }}!
+    </h1></nb-card-body
+  >
 </nb-card>
 
 <nb-card status="success">

@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
 import { dataSourceOptions } from '../data-source';
+import { AnnualFormModule } from '../annual-form/annual-form.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { dataSourceOptions } from '../data-source';
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({ ...dataSourceOptions, autoLoadEntities: true }),
-    UserModule,
     AuthModule,
+    AnnualFormModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

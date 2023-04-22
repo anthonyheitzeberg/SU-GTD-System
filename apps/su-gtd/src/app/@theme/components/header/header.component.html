@@ -4,17 +4,19 @@
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
     <img src="assets\images\silliman_logo.png" alt="Silliman Logo" />
-    <a class="logo" href="#" (click)="navigateHome()">SU-GTD</a>
+    <a class="logo" href="#" (click)="navigateHome()"
+      >PROPOSED CAREER AND COUNSELING DASHBOARD SYSTEM FOR SU GUIDANCE AND
+      TESTING DIVISION</a
+    >
   </div>
 </div>
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="control-item" icon="bell-outline"></nb-action>
     <nb-action class="user-action" *nbIsGranted="['view', 'user']">
       <nb-user
         [onlyPicture]="userPictureOnly"
-        [name]="'Walter White'"
+        [name]="fullName"
         title="Guidance Councilor"
         color="#b7090c"
       >

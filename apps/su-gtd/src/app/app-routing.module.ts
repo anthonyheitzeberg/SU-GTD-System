@@ -1,6 +1,7 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from './@core/auth/guard/auth.guard';
+import { GuestGuard } from './@core/auth/guard/guest.guard';
 
 export const routes: Routes = [
   {
@@ -10,14 +11,13 @@ export const routes: Routes = [
   },
   {
     path: 'pages',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/pages.module').then((m) => m.PagesModule),
   },
   {
     path: 'auth',
-    data: {
-      requireAuth: false,
-    },
+    canActivate: [GuestGuard],
     loadChildren: () =>
       import('./pages/auth/auth.module').then((m) => m.AuthModule),
   },

@@ -1,0 +1,51 @@
+table {
+  width: 100%;
+}
+
+th,
+td {
+  vertical-align: top;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  padding-left: 16px !important;
+  padding-top: 14px !important;
+  font-size: small;
+}
+
+.attended-input,
+.total-input,
+.percentage {
+  width: 5vw;
+}
+
+.activity-name {
+  width: 25vw;
+  max-width: unset !important;
+}
+
+.date-range {
+  width: 15vw;
+}
+
+.target-group {
+  width: 10vw;
+}
+
+p.activity-name {
+  width: 27vw;
+}
+
+p.date {
+  width: 20.25vw;
+}
+
+p.target-group {
+  width: 10.5vw;
+}
+
+p.performance-indicator {
+  width: 12.5vw;
+}
+
+p.percentage {
+  width: 3vw;
+}

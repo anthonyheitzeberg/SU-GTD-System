@@ -1,16 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  NB_WINDOW,
-  NbMediaBreakpointsService,
   NbMenuService,
   NbSidebarService,
   NbThemeService,
 } from '@nebular/theme';
 
-import { User, UserData } from '../../../@core/data/users';
-import { filter, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { Inject } from '@nestjs/common';
+import { AuthService } from '../../../@core/auth/service/auth.service';
+import { User } from '@su-gtd/api-interfaces';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -22,6 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly = false;
   user: User;
+  fullName = '';
 
   currentTheme = 'default';
 
@@ -29,17 +27,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private userService: UserData,
-    private breakpointService: NbMediaBreakpointsService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-
-    this.userService
-      .getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => (this.user = users.nick));
+    this.user = this.authService.user;
+    this.fullName = `${this.user.firstName} ${this.user.lastName}`;
   }
 
   ngOnDestroy() {

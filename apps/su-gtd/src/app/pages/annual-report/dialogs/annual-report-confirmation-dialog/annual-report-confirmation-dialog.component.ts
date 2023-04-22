@@ -13,7 +13,7 @@ export class AnnualReportConfirmationDialogComponent {
     protected ref: NbDialogRef<AnnualReportConfirmationDialogComponent>
   ) {}
 
-  dismiss() {
-    this.ref.close();
+  dismiss(confirm: boolean) {
+    this.ref.close(confirm);
   }
 }

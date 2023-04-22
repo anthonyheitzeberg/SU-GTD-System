@@ -1,22 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { User } from '@su-gtd/api-interfaces';
 
 export interface TokenResponse {
   user: User;
   access_token: string;
-}
-
-export interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  birthday: string;
-  email: string;
 }
 
 const { api } = environment;
@@ -40,7 +32,7 @@ export class AuthService {
   login(user: Partial<User>) {
     return this.http.post(`${api}/auth/login`, user).pipe(
       mergeMap((response) => {
-        return this.setTokens(response['token']);
+        return this.setTokens(response);
       })
     );
   }
@@ -64,7 +56,7 @@ export class AuthService {
   }
 
   async setTokens(response: any) {
-    return this.setToken(response);
+    return this.setToken(response['token']);
   }
 
   getToken() {
@@ -73,17 +65,12 @@ export class AuthService {
 
   async setToken(token: string) {
     localStorage.setItem('accessToken', token);
-
-    return this.getProfile().toPromise();
+    return await firstValueFrom(this.getProfile());
   }
 
   logout() {
-    const callback = () => {
-      sessionStorage.clear();
-
-      localStorage.clear();
-
-      this.user$.next(null);
-    };
+    sessionStorage.clear();
+    localStorage.clear();
+    this.user$.next(null);
   }
 }

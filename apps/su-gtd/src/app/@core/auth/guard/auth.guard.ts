@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 
 @Injectable({
@@ -13,38 +8,12 @@ import { AuthService } from '../service/auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    const { redirect, requireAuth } = next.data;
-
-    const { isAuthenticated } = this.authService;
-
-    const isAuthRequired = requireAuth == null || requireAuth;
-
-    const isAccessAllowed =
-      (isAuthRequired && isAuthenticated) ||
-      (!isAuthRequired && !isAuthenticated);
-
-    if (!isAccessAllowed) {
-      if (redirect) {
-        if (redirect instanceof Array) {
-          this.router.navigate([...redirect]);
-        } else {
-          this.router.navigate([redirect]);
-        }
-
-        return false;
-      }
-
-      if (this.router.routerState.snapshot.url === '') {
-        this.router.navigate(isAuthRequired ? ['/login'] : ['/']);
-
-        return false;
-      }
+  canActivate(): boolean {
+    if (!this.authService.getToken()) {
+      this.router.navigate(['/auth/login']);
+      return false;
     }
 
-    return isAccessAllowed;
+    return true;
   }
 }
