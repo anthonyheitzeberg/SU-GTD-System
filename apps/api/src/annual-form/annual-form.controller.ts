@@ -63,12 +63,4 @@ export class AnnualFormController {
   removeActivity(@Param('id') id: string) {
     return this.annualFormService.deleteOne(id);
   }
-
-  // @Post('/activity/:id')
-  // updateActivity(
-  //   @Param('id') id: string,
-  //   @Body() annualFormActivity: AnnualFormActivity
-  // ) {
-  //   console.log(id);
-  // }
 }

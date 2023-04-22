@@ -73,7 +73,10 @@ export class AnnualFormService {
   };
   years = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Uncomment the next line when creating sample activities
+    // this.createAnnualReportSamples();
+  }
 
   async createAnnualReportSamples() {
     console.log('Creating samples....');
@@ -93,21 +96,6 @@ export class AnnualFormService {
             );
             const randomTargetGroupValue =
               Object.values(TargetGroups)[randomTargetGroupIndex];
-            console.log(
-              this.years[year],
-              GuidanceServices[guidanceServiceKey],
-              Colleges[collegeKey],
-              n
-            );
-            // console.log(
-            //   this.sampleGuidanceServices[guidanceServiceKey][
-            //     Math.floor(
-            //       Math.random() *
-            //         this.sampleGuidanceServices[guidanceServiceKey].length
-            //     )
-            //   ],
-            //   this.generateRandomDate(year)
-            // );
             const dateRange = this.generateRandomDateRange(this.years[year]);
             await firstValueFrom(
               this.saveForm({

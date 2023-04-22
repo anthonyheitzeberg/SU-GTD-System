@@ -118,7 +118,6 @@ export class StatisticsComponent implements OnInit {
 
         this.activities = res;
         this.totalNumOfActivities = res.length;
-        console.log(res);
       });
 
     this.activitiesByYearForm = this.fb.group({

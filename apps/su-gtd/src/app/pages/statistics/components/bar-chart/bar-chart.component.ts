@@ -56,14 +56,13 @@ export class BarChartComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.isInit = true;
-    console.log(this.dataset);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isInit) {
       return;
     }
-    console.log(this.labels, this.dataset);
+
     this.barChartData = {
       labels: this.labels,
       datasets: [

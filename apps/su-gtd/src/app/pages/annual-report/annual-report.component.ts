@@ -91,10 +91,6 @@ export class AnnualReportComponent implements OnInit, OnDestroy {
       college: ['', Validators.required],
       year: [new Date().getFullYear(), Validators.required],
     });
-
-    this.form.get('guidanceServices').valueChanges.subscribe((res) => {
-      console.log(res);
-    });
   }
 
   ngOnDestroy(): void {
@@ -218,7 +214,6 @@ export class AnnualReportComponent implements OnInit, OnDestroy {
   }
 
   clearFormArray = (formArray: FormArray) => {
-    console.log(formArray);
     while (formArray.length !== 0) {
       formArray.removeAt(0);
     }
@@ -280,7 +275,6 @@ export class AnnualReportComponent implements OnInit, OnDestroy {
   }
 
   updateForm(activities: AnnualFormActivity[]) {
-    console.log(activities);
     this.clearFormArray(this.form.get('guidanceServices') as FormArray);
     for (const activity of activities) {
       (this.form.get('guidanceServices') as FormArray).push(
@@ -334,10 +328,6 @@ export class AnnualReportComponent implements OnInit, OnDestroy {
             .map((x) => x.id),
           guidanceServices.map((x) => x.id)
         );
-        console.log(
-          deleteIds,
-          guidanceServices.map((x) => x.id)
-        );
 
         for (const activity of guidanceServices) {
           this.annualFormService
@@ -380,7 +370,6 @@ export class AnnualReportComponent implements OnInit, OnDestroy {
   }
 
   findUniqueIds(arr1: number[], arr2: number[]): number[] {
-    console.log(arr1, arr2);
     const uniqueIds: number[] = [];
 
     // Loop through the first array and add ids that are not in the second array
