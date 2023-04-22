@@ -20,6 +20,15 @@ export class BarChartComponent implements OnInit, OnChanges {
   @Input() labels: string[] = [];
   @Input() dataset = [];
 
+  public pieChartColors = [
+    '#ffa1b5',
+    '#86c7f3',
+    '#ffe29a',
+    '#93d9d9',
+    '#fed29d',
+    '#d77ae4',
+  ];
+
   public barChartLegend = false;
   public barChartPlugins = [];
 
@@ -68,15 +77,8 @@ export class BarChartComponent implements OnInit, OnChanges {
       datasets: [
         {
           data: this.dataset,
-          backgroundColor: [
-            '#ffa1b5',
-            '#86c7f3',
-            '#ffe29a',
-            '#93d9d9',
-            '#fed29d',
-            '#d77ae4',
-          ],
-          hoverBackgroundColor: new Array(6).fill('#fc2947'),
+          backgroundColor: this.pieChartColors,
+          hoverBackgroundColor: this.pieChartColors,
         },
       ],
     };

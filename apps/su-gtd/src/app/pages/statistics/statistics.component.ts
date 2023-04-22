@@ -132,7 +132,7 @@ export class StatisticsComponent implements OnInit {
 
     setTimeout(() => {
       this.showData();
-    }, 200);
+    }, 300);
   }
 
   generateYearSelection(startYear = 2013) {
