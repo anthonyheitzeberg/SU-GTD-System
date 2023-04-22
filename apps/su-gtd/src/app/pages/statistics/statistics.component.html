@@ -101,17 +101,18 @@
       </div>
     </div>
     <div
-      *ngIf="isShowingComparisons"
-      class="d-flex justify-content-around mt-4"
+      class="d-flex flex-column justify-content-center align-items-center mt-4"
     >
-      <h4>{{ comparisonCollegesForm.get('collegeA').value }}</h4>
-      <h4>{{ comparisonCollegesForm.get('collegeB').value }}</h4>
-    </div>
-    <div class="comparison-charts d-flex justify-content-around">
+      <h4 *ngIf="isShowingComparisons">
+        {{ comparisonCollegesForm.get('collegeA').value }}
+      </h4>
       <su-gtd-bar-chart
         [labels]="guidanceServices"
         [dataset]="collegeADataset"
       ></su-gtd-bar-chart>
+      <h4 *ngIf="isShowingComparisons">
+        {{ comparisonCollegesForm.get('collegeB').value }}
+      </h4>
       <su-gtd-bar-chart
         [labels]="guidanceServices"
         [dataset]="collegeBDataset"
