@@ -78,6 +78,9 @@ export class AnnualFormService {
     // this.createAnnualReportSamples();
   }
 
+  /**
+   * This is to initialize a list of random activities for each college per year and per guidance services
+   */
   async createAnnualReportSamples() {
     console.log('Creating samples....');
     for (let year = 0; year < this.years.length; year++) {
@@ -123,16 +126,19 @@ export class AnnualFormService {
     }
   }
 
+  // This performs a GET to get all activities from DB
   getAllActivities() {
     return this.http.get<AnnualFormActivity[]>(`${api}/annual-form/activities`);
   }
 
+  // This performs a GET to get all
   getAllActivitiesByCollegeAndYear(year: number, college: Colleges) {
     return this.http.get<AnnualFormActivity[]>(
       `${api}/annual-form/${college}/${year}`
     );
   }
 
+  // This performs a POST to save the annual report
   saveForm(annualForm: Partial<AnnualFormActivity>) {
     annualForm = {
       ...annualForm,
@@ -153,10 +159,12 @@ export class AnnualFormService {
     );
   }
 
+  // This performs a DELETE to delete an activity by ID
   deleteActivityById(id: number) {
     return this.http.delete(`${api}/annual-form/activity/${id}`);
   }
 
+  // This is to format the date to keep all dates consistent
   formatDate(date: Date): string {
     const month = date.toLocaleString('en-US', { month: 'long' });
     const day = date.toLocaleString('en-US', { day: 'numeric' });
@@ -164,6 +172,12 @@ export class AnnualFormService {
     return `${month}, ${day}, ${yearString}`;
   }
 
+  /**
+   * This is to create an identifier that follows this format: <year | YYYY><college_acronym> e.g. 2023CBA
+   * @param inputString
+   * @param year
+   * @returns null
+   */
   createIdentifier(inputString: string, year: number): string {
     let uppercaseLetters = '';
     inputString = inputString.trim();
@@ -176,6 +190,7 @@ export class AnnualFormService {
     return `${year}${uppercaseLetters}`;
   }
 
+  // This is a utility function that generates a random date given a range
   generateRandomDateRange(year: number): [string, string] {
     const startDate = new Date(year, 0, 1);
     const endDate = new Date(year, 11, 31);
@@ -204,6 +219,7 @@ export class AnnualFormService {
     return [startDateString, endDateString];
   }
 
+  // This performs a GET to get all activities by the annualFormIdentifier
   getAllActivitiesByIdentifier(annualForm: Partial<AnnualFormActivity>) {
     const identifier = this.createIdentifier(
       annualForm.college,

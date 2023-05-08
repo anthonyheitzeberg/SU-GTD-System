@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { Colleges, GuidanceServices } from '@su-gtd/api-enums';
 import { AnnualFormService } from '../annual-report/annual-form.service';
 import { SubSink } from 'subsink';
@@ -17,13 +23,15 @@ export class StatisticsComponent implements OnInit {
   activitiesByYearForm!: FormGroup;
   comparisonCollegesForm!: FormGroup;
 
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @ViewChildren(BaseChartDirective)
+  charts: QueryList<BaseChartDirective>;
 
   years: number[] = [];
   colleges = Colleges;
   collegeADataset = [];
   collegeBDataset = [];
   guidanceServices = [...Object.values(GuidanceServices)];
+  collegesList = [...Object.values(Colleges)];
   activities: AnnualFormActivity[] = [];
   filteredActivitiesByYear: AnnualFormActivity[] = [];
   totalNumOfActivities = 0;
@@ -102,6 +110,68 @@ export class StatisticsComponent implements OnInit {
   public pieChartLegend = true;
   public pieChartPlugins = [];
 
+  public pieChartOptions2: ChartOptions<'pie'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'left',
+        align: 'center',
+      },
+      tooltip: {
+        titleFont: {
+          size: 16,
+        },
+        bodyFont: {
+          size: 16,
+        },
+        callbacks: {
+          label: (tooltipItem: TooltipItem<'pie'>) => {
+            return `${tooltipItem.label}\nwith ${tooltipItem.parsed} ${
+              tooltipItem.parsed > 1 ? 'activities' : 'activity'
+            }`;
+          },
+          afterBody: (tooltipItems: TooltipItem<'pie'>[]) => {
+            let bodyText = '';
+            for (const college of this.collegesList) {
+              bodyText += `\n${college}- ${
+                this.filteredActivitiesByYear.filter(
+                  (activity) =>
+                    activity.college === college &&
+                    activity.guidanceServiceType === tooltipItems[0].label
+                ).length
+              }`;
+            }
+            return `${Math.round(
+              (tooltipItems[0].parsed / this.totalNumOfActivitiesYear) * 100
+            )}% of activities for ${
+              this.activitiesByYearForm.get('year').value
+            }${bodyText}`;
+          },
+        },
+      },
+    },
+  };
+  public pieChartLabels2 = [...Object.values(GuidanceServices)];
+  public pieChartColors2 = [
+    '#7FB3D5',
+    '#79C7D8',
+    '#FFB347',
+    '#FFA07A',
+    '#81C784',
+    '#8BC34A',
+  ];
+  public pieChartDatasets2: ChartDataset<'pie', number[]>[] = [
+    {
+      data: new Array(6).fill(0),
+      backgroundColor: this.pieChartColors,
+      hoverBackgroundColor: this.pieChartColors,
+      hoverBorderColor: new Array(6).fill('#ffffff00'),
+    },
+  ];
+  public pieChartLegend2 = true;
+  public pieChartPlugins2 = [];
+
   constructor(
     private annualFormService: AnnualFormService,
     private fb: FormBuilder
@@ -135,6 +205,10 @@ export class StatisticsComponent implements OnInit {
     }, 300);
   }
 
+  /**
+   * This is to generate a list of years that can be selected
+   * @param startYear
+   */
   generateYearSelection(startYear = 2013) {
     let endDate = new Date().getFullYear();
     for (let i = endDate; i >= startYear; i--) {
@@ -143,6 +217,9 @@ export class StatisticsComponent implements OnInit {
     }
   }
 
+  /**
+   * This is to generate and update the charts data that will passed into the respective chart components
+   */
   showData() {
     const year = this.activitiesByYearForm.get('year').value;
     this.filteredActivitiesByYear = this.activities.filter(
@@ -155,9 +232,22 @@ export class StatisticsComponent implements OnInit {
           (activity) => activity.college === value
         ).length ?? 0;
     }
-    this.chart.update();
+    for (const [i, value] of this.pieChartLabels2.entries()) {
+      this.pieChartDatasets2[0].data[i] =
+        this.filteredActivitiesByYear.filter(
+          (activity) => activity.guidanceServiceType === value
+        ).length ?? 0;
+    }
+
+    this.charts.forEach((c) => {
+      c.update();
+    });
   }
 
+  /**
+   * This is to show the two bar charts that compare two colleges by guidance services
+   * @returns null
+   */
   showComparisonData() {
     const { year, collegeA, collegeB } =
       this.comparisonCollegesForm.getRawValue();
