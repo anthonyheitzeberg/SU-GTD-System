@@ -28,37 +28,29 @@
       </h5>
 
       <h5 class="mt-4 text-center">
-        Pie Chart of Activities per College Department
+        Bar Chart of Activities per College Department
       </h5>
     </div>
     <div class="d-flex justify-content-center">
-      <canvas
-        baseChart
-        [type]="'pie'"
-        [datasets]="pieChartDatasets"
-        [labels]="pieChartLabels"
-        [options]="pieChartOptions"
-        [plugins]="pieChartPlugins"
-        [legend]="pieChartLegend"
-      >
-      </canvas>
+      <su-gtd-bar-chart
+        [dataset]="collegeActivitiesDataset"
+        [labels]="collegesList"
+        [colors]="barChartColors"
+        [classVariant]="'large'"
+      ></su-gtd-bar-chart>
     </div>
     <div>
       <h5 class="mt-4 text-center">
-        Pie Chart of College Department per Activities
+        Bar Chart of College Department per Activities
       </h5>
     </div>
     <div class="d-flex justify-content-center mt-3">
-      <canvas
-        baseChart
-        [type]="'pie'"
-        [datasets]="pieChartDatasets2"
-        [labels]="pieChartLabels2"
-        [options]="pieChartOptions2"
-        [plugins]="pieChartPlugins2"
-        [legend]="pieChartLegend2"
-      >
-      </canvas>
+      <su-gtd-bar-chart
+        [labels]="guidanceServices"
+        [dataset]="guidanceServicesCollegeDataset"
+        [colors]="barChartColors2"
+        [classVariant]="'large'"
+      ></su-gtd-bar-chart>
     </div>
     <h3 class="mt-5">Comparison between two Colleges by Year:</h3>
     <div class="form-control-group" class="mb-2">
@@ -132,10 +124,12 @@
       <su-gtd-bar-chart
         [labels]="guidanceServices"
         [dataset]="collegeADataset"
+        [colors]="barComparisonChartColors"
       ></su-gtd-bar-chart>
       <su-gtd-bar-chart
         [labels]="guidanceServices"
         [dataset]="collegeBDataset"
+        [colors]="barComparisonChartColors"
       ></su-gtd-bar-chart>
     </div>
   </nb-card-body>

@@ -124,6 +124,7 @@ export class AnnualFormService {
         }
       }
     }
+    console.log('Finished');
   }
 
   // This performs a GET to get all activities from DB

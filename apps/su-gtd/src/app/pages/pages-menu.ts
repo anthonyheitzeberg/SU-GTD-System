@@ -23,7 +23,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Statistics',
-    icon: 'pie-chart-outline',
+    icon: 'bar-chart-outline',
     link: '/pages/statistics',
   },
   {

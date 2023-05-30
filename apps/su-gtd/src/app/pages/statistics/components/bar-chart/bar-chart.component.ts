@@ -6,7 +6,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ChartConfiguration, Color } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -19,17 +19,11 @@ export class BarChartComponent implements OnInit, OnChanges {
 
   @Input() labels: string[] = [];
   @Input() dataset = [];
+  @Input() colors: string[] = [];
+  @Input() options: ChartConfiguration<'bar'>['options'] = {};
+  @Input() legend = false;
+  @Input() classVariant = 'default';
 
-  public pieChartColors = [
-    '#ffa1b5',
-    '#86c7f3',
-    '#ffe29a',
-    '#93d9d9',
-    '#fed29d',
-    '#d77ae4',
-  ];
-
-  public barChartLegend = false;
   public barChartPlugins = [];
 
   public barChartData: ChartConfiguration<'bar'>['data'] = {
@@ -65,6 +59,16 @@ export class BarChartComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.isInit = true;
+    this.barChartData = {
+      labels: this.labels,
+      datasets: [
+        {
+          data: this.dataset,
+          backgroundColor: this.colors,
+          hoverBackgroundColor: this.colors,
+        },
+      ],
+    };
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -77,8 +81,8 @@ export class BarChartComponent implements OnInit, OnChanges {
       datasets: [
         {
           data: this.dataset,
-          backgroundColor: this.pieChartColors,
-          hoverBackgroundColor: this.pieChartColors,
+          backgroundColor: this.colors,
+          hoverBackgroundColor: this.colors,
         },
       ],
     };

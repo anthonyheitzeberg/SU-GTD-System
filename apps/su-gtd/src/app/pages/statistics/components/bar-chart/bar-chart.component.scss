@@ -1,4 +1,11 @@
-div,
-canvas {
-  height: 250px !important;
+.default {
+  canvas {
+    height: 250px !important;
+  }
+}
+
+.large {
+  canvas {
+    height: 500px !important;
+  }
 }

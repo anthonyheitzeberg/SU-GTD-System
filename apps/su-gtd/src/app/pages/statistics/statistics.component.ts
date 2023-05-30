@@ -1,15 +1,14 @@
 import {
+  ChangeDetectorRef,
   Component,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { Colleges, GuidanceServices } from '@su-gtd/api-enums';
 import { AnnualFormService } from '../annual-report/annual-form.service';
 import { SubSink } from 'subsink';
 import { AnnualFormActivity } from '@su-gtd/api-interfaces';
-import { ChartData, ChartDataset, ChartOptions, TooltipItem } from 'chart.js';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 @Component({
@@ -30,58 +29,21 @@ export class StatisticsComponent implements OnInit {
   colleges = Colleges;
   collegeADataset = [];
   collegeBDataset = [];
+
+  collegeActivitiesDataset = [];
+  guidanceServicesCollegeDataset = [];
+
   guidanceServices = [...Object.values(GuidanceServices)];
   collegesList = [...Object.values(Colleges)];
+
   activities: AnnualFormActivity[] = [];
   filteredActivitiesByYear: AnnualFormActivity[] = [];
+
   totalNumOfActivities = 0;
   totalNumOfActivitiesYear = 0;
   isShowingComparisons = false;
 
-  public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'right',
-        align: 'center',
-      },
-      tooltip: {
-        titleFont: {
-          size: 16,
-        },
-        bodyFont: {
-          size: 16,
-        },
-        callbacks: {
-          label: (tooltipItem: TooltipItem<'pie'>) => {
-            return `${tooltipItem.label}\nwith ${tooltipItem.parsed} ${
-              tooltipItem.parsed > 1 ? 'activities' : 'activity'
-            }`;
-          },
-          afterBody: (tooltipItems: TooltipItem<'pie'>[]) => {
-            let bodyText = '';
-            for (const service of this.guidanceServices) {
-              bodyText += `\n${service}- ${
-                this.filteredActivitiesByYear.filter(
-                  (activity) =>
-                    activity.college === tooltipItems[0].label &&
-                    activity.guidanceServiceType === service
-                ).length
-              }`;
-            }
-            return `${Math.round(
-              (tooltipItems[0].parsed / this.totalNumOfActivitiesYear) * 100
-            )}% of activities for ${
-              this.activitiesByYearForm.get('year').value
-            }${bodyText}`;
-          },
-        },
-      },
-    },
-  };
-  public pieChartLabels = [...Object.values(Colleges)];
-  public pieChartColors = [
+  public barChartColors = [
     '#7FB3D5',
     '#79C7D8',
     '#FFB347',
@@ -99,61 +61,7 @@ export class StatisticsComponent implements OnInit {
     '#FF8A65',
     '#FF7043',
   ];
-  public pieChartDatasets: ChartDataset<'pie', number[]>[] = [
-    {
-      data: new Array(16).fill(0),
-      backgroundColor: this.pieChartColors,
-      hoverBackgroundColor: this.pieChartColors,
-      hoverBorderColor: new Array(16).fill('#ffffff00'),
-    },
-  ];
-  public pieChartLegend = true;
-  public pieChartPlugins = [];
-
-  public pieChartOptions2: ChartOptions<'pie'> = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'left',
-        align: 'center',
-      },
-      tooltip: {
-        titleFont: {
-          size: 16,
-        },
-        bodyFont: {
-          size: 16,
-        },
-        callbacks: {
-          label: (tooltipItem: TooltipItem<'pie'>) => {
-            return `${tooltipItem.label}\nwith ${tooltipItem.parsed} ${
-              tooltipItem.parsed > 1 ? 'activities' : 'activity'
-            }`;
-          },
-          afterBody: (tooltipItems: TooltipItem<'pie'>[]) => {
-            let bodyText = '';
-            for (const college of this.collegesList) {
-              bodyText += `\n${college}- ${
-                this.filteredActivitiesByYear.filter(
-                  (activity) =>
-                    activity.college === college &&
-                    activity.guidanceServiceType === tooltipItems[0].label
-                ).length
-              }`;
-            }
-            return `${Math.round(
-              (tooltipItems[0].parsed / this.totalNumOfActivitiesYear) * 100
-            )}% of activities for ${
-              this.activitiesByYearForm.get('year').value
-            }${bodyText}`;
-          },
-        },
-      },
-    },
-  };
-  public pieChartLabels2 = [...Object.values(GuidanceServices)];
-  public pieChartColors2 = [
+  public barChartColors2 = [
     '#7FB3D5',
     '#79C7D8',
     '#FFB347',
@@ -161,20 +69,20 @@ export class StatisticsComponent implements OnInit {
     '#81C784',
     '#8BC34A',
   ];
-  public pieChartDatasets2: ChartDataset<'pie', number[]>[] = [
-    {
-      data: new Array(6).fill(0),
-      backgroundColor: this.pieChartColors,
-      hoverBackgroundColor: this.pieChartColors,
-      hoverBorderColor: new Array(6).fill('#ffffff00'),
-    },
+
+  public barComparisonChartColors = [
+    '#ffa1b5',
+    '#86c7f3',
+    '#ffe29a',
+    '#93d9d9',
+    '#fed29d',
+    '#d77ae4',
   ];
-  public pieChartLegend2 = true;
-  public pieChartPlugins2 = [];
 
   constructor(
     private annualFormService: AnnualFormService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private ref: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -202,7 +110,7 @@ export class StatisticsComponent implements OnInit {
 
     setTimeout(() => {
       this.showData();
-    }, 300);
+    }, 200);
   }
 
   /**
@@ -221,27 +129,26 @@ export class StatisticsComponent implements OnInit {
    * This is to generate and update the charts data that will passed into the respective chart components
    */
   showData() {
+    this.collegeActivitiesDataset = [];
+    this.guidanceServicesCollegeDataset = [];
     const year = this.activitiesByYearForm.get('year').value;
     this.filteredActivitiesByYear = this.activities.filter(
       (activity) => activity.year === year
     );
     this.totalNumOfActivitiesYear = this.filteredActivitiesByYear.length;
-    for (const [i, value] of this.pieChartLabels.entries()) {
-      this.pieChartDatasets[0].data[i] =
+    for (const [i, value] of this.collegesList.entries()) {
+      this.collegeActivitiesDataset[i] =
         this.filteredActivitiesByYear.filter(
           (activity) => activity.college === value
         ).length ?? 0;
     }
-    for (const [i, value] of this.pieChartLabels2.entries()) {
-      this.pieChartDatasets2[0].data[i] =
+    for (const [i, value] of this.guidanceServices.entries()) {
+      this.guidanceServicesCollegeDataset[i] =
         this.filteredActivitiesByYear.filter(
           (activity) => activity.guidanceServiceType === value
         ).length ?? 0;
     }
-
-    this.charts.forEach((c) => {
-      c.update();
-    });
+    this.ref.detectChanges();
   }
 
   /**
